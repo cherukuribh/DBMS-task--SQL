@@ -1,0 +1,88 @@
+#lab2
+create table Flight2
+(flightid varchar2(6) primary key,
+departure varchar2(15),
+destination varchar2(15),
+dateofFlight date,
+timeofFlight date);
+
+create table FromLondon
+(flighNo varchar2(6) primary key,
+destination varchar2(15));
+
+Insert into Flight2 values ('SA123', 'London', 'Bonn', 
+ to_date('12-01-15', 'dd-mm-yy'), to_date( '06:45', 'hh24:mi') ); 
+
+Insert into Flight2 values ('CA123', 'Beijing', 'New york', 
+ to_date('21-01-15', 'dd-mm-yy'), to_date( '06:30', 'hh24:mi') ); 
+
+Insert into Flight2 values ('BA555', 'London', 'Accra', 
+ to_date('23-01-15', 'dd-mm-yy'), to_date('14:45','hh24:mi') ); 
+
+Insert into Flight2 values ('JA345', 'Tokyo', 'Moscow', 
+ to_date('21-01-15', 'dd-mm-yy'), to_date( '16:30', 'hh24:mi') ); 
+ 
+Select * from Flight2;
+ 
+Select flightid,departure,destination,to_char(dateofflight,'dd-mm-yy') 
+,to_char(timeofflight,'hh24:mi') from Flight2;
+
+select flightid,departure,destination,to_char(dateofflight,'dd-mm-yy') 
+,to_char(timeofflight,'hh24:mi') from Flight2 
+where (dateofFlight = to_date('21-01-15', 'dd-mm-yy'));
+
+ update flight2
+set destination = 'Mexico'
+where flightid = 'CA123';
+
+
+alter table FromLondon
+add ddate date;
+
+insert into FromLondon (flighno,destination,ddate)
+select flightid,destination,dateofFlight from Flight2 where departure = 'London';
+
+select * from FromLondon;
+select flighno,destination,to_char(ddate,'dd-mm-yy') from FromLondon;
+
+Constraints on foreign keys 
+
+1.Foreign Key Constraint: Used to ensure referential 
+integrity of the data.
+
+CREATE TABLE Course 
+ (courseId CHAR(5) , 
+ title VARCHAR2(30) NOT NULL, 
+ CONSTRAINT pk_course PRIMARY KEY(courseId) 
+ ); 
+ 
+ CREATE TABLE Student 
+ ( sId CHAR(6) PRIMARY KEY, 
+ sName VARCHAR2(30) NOT NULL, 
+ cId CHAR(5), 
+ CONSTRAINT fk_cid FOREIGN KEY(cId) 
+ REFERENCES Course(courseId) 
+ ); 
+
+insert Into  Course values 
+ ('M26','Database Systems');
+
+insert Into  Course values 
+  ('310CT','Agents'); 
+  
+insert Into Student values
+ ('S1', 'Smith', 'M26'); 
+
+insert Into Student values
+ ('S2', 'Wang', '310CT'); 
+ 
+select * from course;
+select * from student;
+
+delete from course where courseid='M26';
+The foreign key in Student refers to the Primary key in Course.
+
+
+
+
+

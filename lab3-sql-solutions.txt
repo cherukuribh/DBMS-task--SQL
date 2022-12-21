@@ -1,0 +1,124 @@
+lab 3
+A)
+CREATE TABLE Department 
+(dept_no NUMBER(2) PRIMARY KEY, 
+ dept_name VARCHAR2(20) NOT NULL, 
+ dept_location VARCHAR2(20) 
+ ); 
+ 
+ CREATE TABLE Employee 
+(emp_no CHAR(9) PRIMARY KEY, 
+ emp_last_name VARCHAR2(25) NOT NULL, 
+ emp_first_name VARCHAR2(25) NOT NULL, 
+ emp_date_of_birth DATE, 
+ emp_salary NUMBER(7,2) CHECK (emp_salary <= 85000), 
+ emp_gender CHAR, 
+ emp_dept_no NUMBER(2) REFERENCES department(dept_no) 
+ ON DELETE SET NULL 
+); 
+
+INSERT INTO Department values 
+(1, 'Production', 'Selly Oak'); 
+INSERT INTO Department values 
+ (2, 'Marketing', 'Edgbaston'); 
+INSERT INTO Department values 
+ (3, 'Sales', 'Northfield'); 
+
+select * from Department;
+
+insert into Employee values
+('666', 'Joyner', 'Suzanne', to_date('12-06-1980', 'dd-mm-yyyy'), 30000, 'F', 1);
+insert into Employee values
+ ('444','Zhu', 'Waiman', to_date('12-08-1970', 'dd-mm-yyyy'), 43000,'M',2); 
+insert into Employee values
+ ('777', 'Hussain', 'Ryad',to_date('10-08-1975', 'dd-mm-yyyy') , 35000, 'M', 1); 
+insert into Employee values
+ ('111', 'Keita', 'Salif',to_date('29-03-1969', 'dd-mm-yyyy'), 43000, 'M', 3); 
+insert into Employee values
+ ('888', 'Shahine', 'Nadia', to_date('04-05-1960','dd-mm-yyyy'), 45000, 'F', 2); 
+insert into Employee values
+ ('222', 'Kamarazov', 'Boris', to_date('31-07-1978','dd-mm-yyyy'), 28000, 'M', 3); 
+ insert into Employee values
+ ('333', 'Patel', 'Shishir', to_date('09-11-1955','dd-mm-yyyy'), 45000, 'M', 2);
+ insert into Employee values
+ ('555', 'Silva', 'Carmen', to_date('20-02-1977','dd-mm-yyyy'), 40000, 'F', 3);
+ insert into Employee values
+ ('999', 'Kurusawa', 'Mifune', to_date('08-09-1952','dd-mm-yyyy'), 50000, 'M', 2);
+select * from employee;
+
+B) 
+1
+select emp_last_name,emp_first_name,to_char(emp_date_of_birth,'dd-mm-yyyy') from employee;
+2
+select emp_no,emp_last_name,emp_salary from employee where emp_salary > 40000;
+3
+select emp_last_name,to_char(emp_date_of_birth,'dd-mm-yyyy') from employee where emp_last_name = 'S';
+4
+select emp_last_name,emp_first_name from employee where emp_gender = 'F' order by emp_first_name;
+5
+select emp_last_name,emp_first_name,emp_dept_no from employee where emp_gender ='M' and emp_dept_no != '2';
+6
+select emp_last_name,emp_first_name from employee 
+where emp_gender = 'F' and emp_salary > 35000 and to_char(emp_date_of_birth,'yyyy')<1980  
+order by emp_last_name;
+
+
+C)
+1
+select * from employee;
+select AVG(emp_salary) "Average Employee Salary" from employee;
+2
+select SUM(emp_salary) from employee;
+
+3. The highest and lowest salaries paid to employees. 
+
+select MAX(emp_salary) highest_salary,MIN(emp_salary) lowest_salary from employee;
+
+4. The number of employees and average salary of employees in each department. 
+
+select emp_dept_no,count(*) no_of_employees , AVG(emp_salary) "average salary" 
+from employee group by emp_dept_no;
+
+5. The average salary in each department and the average salary after
+an across-theboard 25% pay rise. 
+
+select emp_dept_no,AVG(emp_salary) "Average salary" ,AVG(emp_salary) * 0.25 " avg sal after 25%" 
+from employee group by emp_dept_no;
+
+
+6. The highest salary figure for each department. 
+
+select emp_dept_no,MAX(emp_salary) highest_salary from employee group by emp_dept_no;
+
+7. The average salary of employees in each department, sorted by the average salary 
+figure. 
+
+select emp_dept_no,AVG(emp_salary) "average_salary" from employee
+group by emp_dept_no order by AVG(emp_salary);
+
+
+8. The average salary of employees in each department, where the average is greater 
+than £35000. 
+
+select emp_dept_no,AVG(emp_salary) "average_salary" from employee group by emp_dept_no
+having AVG(emp_salary) > 35000;
+
+9. The average salary of employees in each departments except for department 1, 
+where the average is greater than £35000. 
+
+select emp_dept_no,AVG(emp_salary) "average_salary" from employee where emp_dept_no <> 1 group by emp_dept_no
+having AVG(emp_salary) > 35000;
+
+
+
+10. The average salary of employees in each department, where the average is greater 
+than £35000, and the number of employees in each department is greater than 2; 
+
+select emp_dept_no,AVG(emp_salary) "average_salary",count(*) no_of_employees 
+from employee group by emp_dept_no
+having AVG(emp_salary) > 35000 and count(*) > 2;
+
+
+11. The highest average salary figure for all departments.
+
+select MAX(avg(emp_salary)) from employee group by emp_dept_no;

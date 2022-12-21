@@ -1,0 +1,28 @@
+select user from dual;
+select * from tab;
+create table staff
+(staffid varchar2(6) primary key,
+staffname varchar2(15),
+staffdob date,
+stafffaculty varchar2(6));
+purge table staff;
+purge table faculty;
+
+create table faculty
+(facultyid varchar2(6) primary key,
+facultyname varchar2(20) not null,
+noofstaff integer check(noofstaff>1)
+);
+
+create table staff
+(staffid varchar2(6) primary key,
+staffname varchar2(15),
+staffdob date,
+stafffaculty varchar2(6) references faculty); 
+
+select * from tab;
+
+drop table faculty;
+#unique/primary keys in table referenced by foreign keys 
+
+drop table faculty cascade constraints;
